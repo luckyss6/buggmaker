@@ -1,12 +1,21 @@
 package main
 
 import (
-	_ "buggmaker/internal/packed"
-
-	"github.com/gogf/gf/v2/os/gctx"
-	"buggmaker/internal/cmd"
+	"github.com/sirupsen/logrus"
+	"os"
 )
 
+var log = logrus.New()
+
 func main() {
-	cmd.Main.Run(gctx.New())
+
+	// 初始化日志
+	log.Out = os.Stdout
+	log.Formatter = &logrus.JSONFormatter{}
+
+	log.WithFields(logrus.Fields{
+		"animal": "walrus",
+		"size":   10,
+	}).Info("A group of walrus emerges from the ocean")
+
 }
