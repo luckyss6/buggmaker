@@ -1,21 +1,24 @@
 package main
 
 import (
-	"github.com/sirupsen/logrus"
-	"os"
+	"buggmaker/storage/logs"
+	"fmt"
 )
 
-var log = logrus.New()
+// 日志参数
+const (
+	code    = "code"
+	message = "message"
+)
 
 func main() {
-
+	fmt.Println()
 	// 初始化日志
-	log.Out = os.Stdout
-	log.Formatter = &logrus.JSONFormatter{}
 
-	log.WithFields(logrus.Fields{
-		"animal": "walrus",
-		"size":   10,
-	}).Info("A group of walrus emerges from the ocean")
+	log, err := logs.NewLog()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 }
