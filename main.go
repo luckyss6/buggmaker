@@ -1,7 +1,6 @@
 package main
 
 import (
-	"buggmaker/storage/logs"
 	"fmt"
 )
 
@@ -15,10 +14,10 @@ func main() {
 	fmt.Println()
 	// 初始化日志
 
-	log, err := logs.NewLog()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	// log, err := logs.NewLog()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
 
 }
