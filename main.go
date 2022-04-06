@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	gin "github.com/gin-gonic/gin"
 	mongo "gopkg.in/mgo.v2"
 )
 
@@ -21,6 +22,10 @@ func main() {
 
 	fmt.Println(session)
 
+	fmt.Print("Start")
+
+	r := gin.Default()
+	r.Run()
 	// // 初始化日志
 	// router := gin.New()
 	// err := router.Run("127.0.0.1:80")
