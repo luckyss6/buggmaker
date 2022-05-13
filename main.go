@@ -1,6 +1,12 @@
 package main
 
-import "github.com/kataras/iris/v12"
+import (
+	"buggmaker/storage/cache"
+	"fmt"
+	"github.com/kataras/iris/v12"
+	"gopkg.in/yaml.v3"
+	"io/ioutil"
+)
 
 // 日志参数
 // const (
@@ -14,16 +20,47 @@ func myMiddleware(ctx iris.Context) {
 }
 
 func main() {
-	// 启动项目
-	app := iris.Default()
 
-	// 加载日志
+	var redisConfig cache.Redis
+	var redisClient cache.Res
+
+	file, err := ioutil.ReadFile("./config/config.yaml")
+	if err != nil {
+		return
+	}
+
+	// 从 yaml 中读取 redis 配置
+	err = yaml.Unmarshal(file, &redisConfig)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	client, err := redisClient.NewRedisClient(redisConfig)
+
+	_, err = client.Ping().Result()
+	if err != nil {
+		return
+	}
+
+	app := iris.New()
+
 	app.Use(myMiddleware)
 
-	app.Handle("Get", "/", func(ctx iris.Context) {
-		ctx.JSON(iris.Map{"message": "Halo World"})
+	app.RegisterView(iris.HTML("./view", ".html"))
+
+	app.Get("/", func(ctx iris.Context) {
+		// Bind: {{.message}} with "Hello world!"
+		ctx.ViewData("message", "Hello world!")
+		// Render template file: ./views/hello.html
+		ctx.View("hello.html")
 	})
 
-	// 启动端口
-	app.Run(iris.Addr(":80"))
+	app.Get("/user/{id:uint64}", func(ctx iris.Context) {
+		userID, _ := ctx.Params().GetUint64("id")
+		ctx.Writef("User ID: %d", userID)
+	})
+
+	config := iris.WithConfiguration(iris.YAML("./iris.yaml"))
+	app.Run(iris.Addr(":80"), config)
 }
