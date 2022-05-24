@@ -1,5 +1,0 @@
-redis:
-  network: ""
-  addr: "119.91.80.85:6379"
-  password: "!cmsDB123"
-  db: 1
