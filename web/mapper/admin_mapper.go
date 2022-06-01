@@ -2,11 +2,13 @@ package mapper
 
 import (
 	"buggmaker/common/model"
-	"buggmaker/common/storage"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
-type AdminMapper struct{}
+type AdminMapper struct {
+	UserCollection mgo.Collection
+}
 
 //  FindList
 //  @Description: 		查询用户列表
@@ -15,7 +17,7 @@ type AdminMapper struct{}
 //  @return err			错误
 
 func (admin *AdminMapper) FindList() (userList []model.User, err error) {
-	err = storage.UserCollection.Find(map[string]interface{}{}).All(&userList)
+	err = admin.UserCollection.Find(map[string]interface{}{}).All(&userList)
 	return
 }
 
@@ -28,7 +30,7 @@ func (admin *AdminMapper) FindList() (userList []model.User, err error) {
 
 func (admin *AdminMapper) CreateUser(username, password string) (err error) {
 
-	err = storage.UserCollection.Insert(bson.M{
+	err = admin.UserCollection.Insert(bson.M{
 		"username": username,
 		"password": password,
 	})

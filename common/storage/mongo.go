@@ -6,12 +6,11 @@ import (
 	"time"
 )
 
-var UserCollection *mongo.Collection
+var MongoSession *mongo.Session
 
 func InitMongo() (err error) {
 	var (
-		mongoConfig  *mongo.DialInfo
-		MongoSession *mongo.Session
+		mongoConfig *mongo.DialInfo
 	)
 
 	mongoConfig = &mongo.DialInfo{
@@ -26,6 +25,5 @@ func InitMongo() (err error) {
 		fmt.Printf("mgo dail error[%s]\n", err.Error())
 		return
 	}
-	UserCollection = MongoSession.DB("user").C("user")
 	return
 }

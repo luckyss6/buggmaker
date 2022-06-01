@@ -28,9 +28,10 @@ func main() {
 
 	defer storage.RedisS.Close()
 
+	defer storage.MongoSession.Close()
+
 	// init iris
 	app := iris.New()
-	app.Logger()
 	// router
 	router.Hub(app)
 	// start
