@@ -8,4 +8,5 @@ import "github.com/kataras/iris/v12"
 
 func Hub(app *iris.Application) {
 
+	AdminRouter(app.Party("/api"))
 }
