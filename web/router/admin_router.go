@@ -3,7 +3,6 @@ package router
 import (
 	"buggmaker/common/model"
 	"buggmaker/web/mapper"
-	"fmt"
 	"github.com/kataras/iris/v12"
 )
 
@@ -12,8 +11,8 @@ func AdminRouter(party iris.Party) {
 		admin = party.Party("/admin")
 		aus   = adminService{adminDB: mapper.AdminMapper{}}
 	)
-	admin.Get("/get", aus.ShowUserList)
-
+	admin.Get("/", aus.ShowUserList)
+	admin.Put("/{username:string}/{password:string}", aus.InsertUser)
 }
 
 type adminService struct {
@@ -35,8 +34,6 @@ func (admin *adminService) ShowUserList(ctx iris.Context) {
 		return
 	}
 
-	fmt.Println("result:", result)
-
 	ctx.JSON(result)
 }
 
@@ -46,5 +43,13 @@ func (admin *adminService) ShowUserList(ctx iris.Context) {
 //  @param ctx
 
 func (admin *adminService) InsertUser(ctx iris.Context) {
-
+	var (
+		err      error
+		username = ctx.Params().GetStringDefault("username", "")
+		password = ctx.Params().GetStringDefault("password", "")
+	)
+	if err = admin.adminDB.CreateUser(username, password); err != nil {
+		return
+	}
+	ctx.JSON("ok")
 }
