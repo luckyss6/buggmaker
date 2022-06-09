@@ -32,6 +32,7 @@ func main() {
 
 	// init iris
 	app := iris.New()
+
 	// router
 	router.Hub(app)
 	// start

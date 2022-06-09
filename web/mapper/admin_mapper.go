@@ -2,12 +2,17 @@ package mapper
 
 import (
 	"buggmaker/common/model"
-	"gopkg.in/mgo.v2"
+	"buggmaker/common/storage"
 	"gopkg.in/mgo.v2/bson"
 )
 
 type AdminMapper struct {
-	UserCollection mgo.Collection
+}
+
+type AdminInterface interface {
+	FindList() (userList []model.User, err error)
+	CreateUser(username, password string) error
+	DelUser(username string) error
 }
 
 //  FindList
@@ -17,7 +22,7 @@ type AdminMapper struct {
 //  @return err			错误
 
 func (admin *AdminMapper) FindList() (userList []model.User, err error) {
-	err = admin.UserCollection.Find(map[string]interface{}{}).All(&userList)
+	err = storage.MongoSession.DB("user").C("user").Find(map[string]interface{}{}).All(&userList)
 	return
 }
 
@@ -30,9 +35,13 @@ func (admin *AdminMapper) FindList() (userList []model.User, err error) {
 
 func (admin *AdminMapper) CreateUser(username, password string) (err error) {
 
-	err = admin.UserCollection.Insert(bson.M{
+	err = storage.MongoSession.DB("user").C("user").Insert(bson.M{
 		"username": username,
 		"password": password,
 	})
 	return err
+}
+
+func (admin *AdminMapper) DelUser(username string) (err error) {
+	return
 }

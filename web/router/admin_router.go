@@ -19,6 +19,11 @@ type adminService struct {
 	adminDB mapper.AdminMapper
 }
 
+type AdminRouteInterface interface {
+	ShowUserList(ctx iris.Context)
+	InsertUser(ctx iris.Context)
+}
+
 //  ShowUserList
 //  @Description:		展示用户列表
 //  @receiver admin
